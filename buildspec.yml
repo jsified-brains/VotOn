@@ -1,0 +1,14 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - npm install
+      - npm run rimraf -- build
+      - npm run tsc
+      - find . -mtime +13700 -ls -exec touch -am '{}' \;
+      - aws cloudformation package --template-file cloudformation.yaml --s3-bucket voton-build --output-template-file packaged-sam.yaml --region us-east-1
+artifacts:
+  type: zip
+  files:
+    - packaged-sam.yaml
