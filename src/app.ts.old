@@ -1,0 +1,62 @@
+import * as express from 'express';
+import * as path from 'path';
+import * as minimist from 'minimist';
+import * as BodyParser from 'body-parser';
+import * as AwsServerlessExpressMiddleware from 'aws-serverless-express/middleware';
+// import * as AWS from 'aws-sdk';
+
+// AWS.config.update({region:'us-east-1'});
+let app = express();
+
+app.use(BodyParser.json());
+app.use(BodyParser.urlencoded({extended: true}));
+app.use(AwsServerlessExpressMiddleware.eventContext());
+
+
+// Ephemeral in-memory data store
+let users = [{
+  id: 1,
+  name: 'Joe'
+}, {
+  id: 2,
+  name: 'Jane'
+}]
+
+//Simple get call for testing project setup
+app.get('/', function (req, res) {
+    res.send({"msg":"Yay! your setup is working from pipeline "});
+});
+
+// let dynamodb = new AWS.DynamoDB();
+app.get('/users', (req, res) => {
+    res.json(users)
+  //   let user = {};
+  //   let dbParams: AWS.DynamoDB.GetItemInput = {
+  //     TableName : 'Users',
+  //     Key: {
+  //       "userId" : {
+  //         S: '123'
+  //     }
+  //   }
+  // };
+  //   // DynamoDB.GetItemInput
+  //   dynamodb.getItem(dbParams, function(error, data){
+  //     if(error){
+  //       console.log('No user found: ',error);
+  //       res.json(user);
+  //     }else{
+  //       if(data){
+  //         console.log('user is : '+data);
+  //         user = data;
+  //         res.json(data);
+  //       }
+  //     }
+  //   });
+  });
+
+  // The aws-serverless-express library creates a server and listens on a Unix
+// Domain Socket for you, so you can remove the usual call to app.listen.
+// app.listen(1337, () => console.log('ready on port 1337') );
+// Export your express server so you can import it in the lambda function.
+export = app;
+  
