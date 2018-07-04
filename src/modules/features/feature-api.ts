@@ -10,7 +10,7 @@ export async function getById(request, response){
     console.log("processing Features api call");
     try {
         //Call DynamoDB to get feature
-        let data = await DBUtils.getDataById('Features','featureId',request.params.id)
+        let data = await DBUtils.getDataById('Features','featureId',request.params.id);
         console.log("sending data");
         
         return response.status(200).json(data);       
